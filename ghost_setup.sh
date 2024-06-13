@@ -1,13 +1,16 @@
 #!/bin/bash
 
+LOGFILE="/tmp/ghost_install.log"
+exec > >(tee -a $LOGFILE) 2>&1
+
 starting_point() {
-    echo "Welcome to Ghost Install Script"
+    echo "Welcome to Ghost Install Script for AWS EC2"
     sleep 3
     echo " "
     echo "Please start with creating a user then run step 2 which complets the rest of the script"
     echo "1. Create a new user for Ghost"
     echo "2. Continue with the rest of the install"
-    read answer
+    read -p "Enter your choice: " answer
     if [[ $answer -eq "1" ]]; then
         create_user
     else
@@ -31,7 +34,6 @@ create_user() {
         echo "Creating user [$user]"
         sleep 1
         adduser $user
-        echo "Created user $user..."
         echo " "
         sleep 2
         echo "Setting $user to sudo group..."
@@ -39,7 +41,7 @@ create_user() {
         echo "New user added..."
         sleep 3 
     fi
-    echo "Continuing & Switching user --> $user"
+    echo "Continuing & Switching user --> [$user]"
     sleep 3
     su -c '/tmp/ghost_setup.sh' $user
     sleep 3
@@ -50,18 +52,14 @@ check_updates() {
     sleep 2
     echo "Checking for Updates and Upgrading..."
     sleep 2
-    sudo -S apt update
-    echo " "
-    echo "Running Upgrade -y next..."
-    sleep 4
-    sudo -S apt upgrade -y
+    sudo -S apt update && sudo -S upgrade -y
     clear
 }
 
 install_nginx() {
     echo "Installing Nginx..."
     echo " "
-    sleep 3
+    sleep 2
     sudo -S apt install nginx -y
     echo "Nginx Install Completed..."
     sleep 2
@@ -69,12 +67,11 @@ install_nginx() {
 
 check_firewall() {
     clear
-    echo "Do you have ufw enabled? Y/N: "
-    read firewall
-    if [[ $firewall -eq "y" ]]; then
-        sudo -S apt allow 'Nginx Full'
+    read -p "Do you have ufw enabled? Y/N: " firewall
+    if [[ $firewall =~ ^[Yy]$ ]]; then
+        sudo -S ufw allow 'Nginx Full'
     else
-        echo "Skipping this Step"
+        echo "Skipping this configuration"
         echo " "
         sleep 2
     fi
@@ -83,11 +80,11 @@ check_firewall() {
 install_mysql() {
     clear
     echo "Installing MySQL Server..."
-    sleep 3
+    sleep 2
     sudo -S apt install mysql-server -y
     echo "MySQL Install completed..."
     echo " "
-    sleep 5
+    sleep 3
     clear
     prep_mysql
 }
@@ -96,45 +93,46 @@ prep_mysql() {
     echo "Copy this and paste the following 3 lines into mysql"
     echo "Paste in one at a time"
     echo " "
-    echo "ALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY '<your-new-root-password>';"
-    echo "FLUSH PRIVILEGES;"
-    echo "exit"
+    echo -e '\033[1;32mALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'your-new-strong-root-password';\033[m';
+    echo -e "\033[1;32mFLUSH PRIVILEGES;\033[m";
+    echo -e "\033[1;32mexit\033[m";
     echo " "
+    echo -e "\nOpening MySQL consol..."
     sudo -S mysql
 }
 
 install_nodejs() {
     clear
-    echo "Installing Node.js Keyring"
+    echo "Installing Node.js, Keyring and certificates"
     sleep 2
-    sudo -S apt update
-    sudo -S apt install -y ca-certificates curl gnupg
+    sudo -S apt update && sudo -S apt install -y ca-certificates curl gnupg
     $keyring="/etc/apt/keyrings"
-    if [ -d /etc/apt/keyrings ]; then
-        echo "Keyring Directory exist"
-        echo "Adding node.js keyring to $keyring directory..."
-        sleep 2
-        curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo -S gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-    else
+    if [ ! -d $keyring ]; then
         echo "$keyring does not exist...creating it now."
         sleep 2
         sudo -S mkdir -p $keyring
         curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo -S gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
     fi
+    
+    sleep 1
+    echo " "
+    echo "Adding node.js keyring to $keyring directory..."
+    sleep 2
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo -S gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 
     clear
     echo "Node.JS Keyring added..."
     echo "Installing Node.js v18"
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-    echo "Continuing in 5 seconds..."
-    sleep 5
+    echo "Continuing in 3 seconds..."
+    sleep 3
     clear
     sudo -S apt update
     echo "Running apt install nodejs -y next..."
-    sleep 3
+    sleep 2
     sudo -S apt install nodejs -y
     echo "Node.JS Install completed..."
-    sleep 3
+    sleep 2
 }
 
 install_ghostCLI() {
@@ -146,11 +144,9 @@ install_ghostCLI() {
 
 create_website_dir() {
     echo " "
-    echo "Let's Create a directory for your blog website"
-    echo "Enter your domain name..."
-    read domain
-    echo "Enter your username created in step 1."
-    read user
+    echo "Creating a directory for your blog website..."
+    read -p "Enter your domain name: " domain
+    read -p  "Enter your username created in step 1: " user
     sudo -S mkdir -p /var/www/$domain
     sudo -S chown $user:$user /var/www/$domain
     sudo -S chmod 775 /var/www/$domain
@@ -163,9 +159,12 @@ create_website_dir() {
 
 install_ghost() {
     clear
-    echo "Installing Ghost into current directory..."
-    pwd
-    sleep 3
+    echo "Installing Ghost into current directory...$(pwd)"
+    echo "You will be required to enter your MySQL Password and User Password serveral time."
+    sleep 2
+    echo "Ghost Install will also attempt to install TSL certificate for your website"
+    echo "Be sure to have your security groups config correctly"
+    sleep 5
     ghost install
 }
 
@@ -183,7 +182,7 @@ main() {
     install_mysql
     install_nodejs
     install_ghostCLI
-    create_website_dir username
+    create_website_dir
 }
 
 start
