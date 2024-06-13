@@ -1,8 +1,5 @@
 #!/bin/bash
 
-LOGFILE="/tmp/ghost_install.log"
-exec > >(tee -a $LOGFILE) 2>&1
-
 starting_point() {
     echo "Welcome to Ghost Install Script for AWS EC2"
     sleep 1
@@ -93,7 +90,7 @@ prep_mysql() {
     echo "Copy this and paste the following 3 lines into mysql"
     echo "Paste in one at a time"
     echo " "
-    echo -e '\033[1;32m1.-----> ALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'your-new-strong-root-password';\033[m';
+    echo -e '\033[1;32m1.-----> ALTER USER "root"@"localhost" IDENTIFIED WITH "mysql_native_password" BY "your-new-strong-root-password";\033[m';
     echo -e "\033[1;32m2.-----> FLUSH PRIVILEGES;\033[m";
     echo -e "\033[1;32m3.-----> exit\033[m";
     echo " "

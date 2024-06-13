@@ -14,22 +14,24 @@ With this easy-to-follow guide, you can have a working version of Ghost and be p
 
 
 ## AWS EC2 Instructions:
+I'm assuming you have already launched your EC2 and are ready to proceed with the Ghost Install
+
 
 Start out by either SSH into your instance or use SSM to connect from the AWS EC2 console.
+
 Run the following cmds in terminal:
 
 1. `cd /tmp`
 
   * Either git clone the repo or create a new file with nano or vim and copy / paste the script into the file and save.
 
-I'll be using the copy and paste method for this walkthough.
+  * I'll be using git clone https://github.com/Avila5301/Ghost.git method for this walkthough.
 
-2. Create the new file with `sudo nano ghost_setup.sh`
+2. Copy the repository `git clone https://github.com/Avila5301/Ghost.git` and `cd Ghost` into the Ghost directory.
 
-3. While in file, copy and paste the script into the editor, save and exit.
-4. Run `sudo chmod +x ghost_setup.sh` to set execution permissions to the file
-5. Run the script as sudo `sudo ./ghost_setup.sh` which will start the install process
-6. Walk through all the steps of the script:
+3. Run `sudo chmod +x ghost_setup.sh` to set execution permissions to the file
+4. Run the script as sudo `sudo ./ghost_setup.sh` which will start the install process
+5. Walk through all the steps of the script:
    1. Select 1 and create a new user for ghost
    2. The script will now use the new user to complete the rest of the script
       * During the MySQL install, be sure to note the three cmd to copy and paste into mysql console
