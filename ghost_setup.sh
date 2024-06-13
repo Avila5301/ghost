@@ -5,9 +5,8 @@ exec > >(tee -a $LOGFILE) 2>&1
 
 starting_point() {
     echo "Welcome to Ghost Install Script for AWS EC2"
-    sleep 3
-    echo " "
-    echo "Please start with creating a user then run step 2 which complets the rest of the script"
+    sleep 1
+    echo "Please start with creating a user then run step 2 which completes the rest of the script."
     echo "1. Create a new user for Ghost"
     echo "2. Continue with the rest of the install"
     read -p "Enter your choice: " answer
@@ -34,8 +33,8 @@ create_user() {
         echo "Creating user [$user]"
         sleep 1
         adduser $user
-        echo " "
         sleep 2
+        echo " "
         echo "Setting $user to sudo group..."
         usermod -aG sudo $user
         echo "New user added..."
@@ -43,7 +42,7 @@ create_user() {
     fi
     echo "Continuing & Switching user --> [$user]"
     sleep 3
-    su -c '/tmp/ghost_setup.sh' $user
+    su -c '/tmp/Ghost/ghost_setup.sh' $user
     sleep 3
 }
 
@@ -52,7 +51,8 @@ check_updates() {
     sleep 2
     echo "Checking for Updates and Upgrading..."
     sleep 2
-    sudo -S apt update && sudo -S upgrade -y
+    sudo -S apt update 
+    sudo -S apt upgrade -y
     clear
 }
 
@@ -93,11 +93,11 @@ prep_mysql() {
     echo "Copy this and paste the following 3 lines into mysql"
     echo "Paste in one at a time"
     echo " "
-    echo -e '\033[1;32mALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'your-new-strong-root-password';\033[m';
-    echo -e "\033[1;32mFLUSH PRIVILEGES;\033[m";
-    echo -e "\033[1;32mexit\033[m";
+    echo -e '\033[1;32m1.-----> ALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'your-new-strong-root-password';\033[m';
+    echo -e "\033[1;32m2.-----> FLUSH PRIVILEGES;\033[m";
+    echo -e "\033[1;32m3.-----> exit\033[m";
     echo " "
-    echo -e "\nOpening MySQL consol..."
+    echo "Opening MySQL console..."
     sudo -S mysql
 }
 
@@ -105,7 +105,9 @@ install_nodejs() {
     clear
     echo "Installing Node.js, Keyring and certificates"
     sleep 2
-    sudo -S apt update && sudo -S apt install -y ca-certificates curl gnupg
+    sudo -S apt update
+    echo " "
+    sudo -S apt install -y ca-certificates curl gnupg
     $keyring="/etc/apt/keyrings"
     if [ ! -d $keyring ]; then
         echo "$keyring does not exist...creating it now."
