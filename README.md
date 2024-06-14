@@ -122,9 +122,9 @@ Here is what you can expect and the defaults you can enter
     ? Sudo Password [hidden]
     ✔ Starting Ghost`
 
-Ghost was installed successfully! To complete setup of your publication, visit:
+    Ghost was installed successfully! To complete setup of your publication, visit:
 
       https://TheURLtoYourWebSite.com
 
 
-You can now navagate to your website with the link and setup your website.
+You can now navagate to your website with the link and setup your new website.
