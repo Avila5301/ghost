@@ -52,9 +52,20 @@ Run the following cmds in terminal:
 
 2. Copy the repository `git clone https://github.com/Avila5301/Ghost.git` and `cd Ghost` into the Ghost directory.
 
-3. Run `sudo chmod +x ghost_setup.sh` to set execution permissions to the file
-4. Run the script as sudo `sudo ./ghost_setup.sh` which will start the install process
-5. Walk through all the steps of the script:
+        git clone https://github.com/Avila5301/Ghost.git
+   <br>
+   
+        cd Ghost
+
+4. Run `sudo chmod +x ghost_setup.sh` to set execution permissions to the file
+
+        sudo chmod +x ghost_setup.sh
+   
+6. Run the script as sudo `sudo ./ghost_setup.sh` which will start the install process
+
+        sudo ./ghost_setup.sh
+
+7. Walk through all the steps of the script:
    1. Select 1 and create a new user for ghost
    2. The script will now use the new user to complete the rest of the script
       * During the MySQL install, be sure to note the three cmd to copy and paste into mysql console
@@ -69,47 +80,47 @@ Run the following cmds in terminal:
 When Ghost is being installed which is the last part of the script, it will prompt you with serveral questions and to enter your user password. 
 Here is what you can expect and the defaults you can enter
 
-? Enter your blog URL: YOUR DOMAIN NAME / URL | myblogwebsite.com
-? Enter your MySQL hostname: 127.0.0.1 | Press enter to leave default
-? Enter your MySQL username: root | Enter Root
-? Enter your MySQL password: [hidden] | Enter your MySQL Root password
-? Enter your Ghost database name: | Press enter to leave default
-✔ Configuring Ghost
-✔ Setting up instance
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-✔ Setting up "USERNAME" system user
-? Do you wish to set up "USERNAME" mysql user? | Enter Yes for default
-? Do you wish to set up Nginx? Yes
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-+ sudo nginx -s reload
-? Sudo Password [hidden]
-✔ Setting up Nginx
-? Do you wish to set up SSL? Yes
-? Enter your email (For SSL Certificate) ENTER YOUR EMAIL ADDRESS
-+ sudo mkdir -p /etc/letsencrypt
-? Sudo Password [hidden]
-+ sudo ./acme.sh --install --home /etc/letsencrypt
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-+ sudo nginx -s reload
-? Sudo Password [hidden]
-✔ Setting up SSL
-? Do you wish to set up Systemd? Yes
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-✔ Setting up Systemd
-? Sudo Password [hidden]
-? Do you want to start Ghost? Yes
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-? Sudo Password [hidden]
-✔ Starting Ghost
+    ? Enter your blog URL: YOUR DOMAIN NAME / URL | myblogwebsite.com
+    ? Enter your MySQL hostname: 127.0.0.1 | Press enter to leave default
+    ? Enter your MySQL username: root | Enter Root
+    ? Enter your MySQL password: [hidden] | Enter your MySQL Root password
+    ? Enter your Ghost database name: | Press enter to leave default
+    ✔ Configuring Ghost
+    ✔ Setting up instance
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    ✔ Setting up "USERNAME" system user
+    ? Do you wish to set up "USERNAME" mysql user? | Enter Yes for default
+    ? Do you wish to set up Nginx? Yes
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    + sudo nginx -s reload
+    ? Sudo Password [hidden]
+    ✔ Setting up Nginx
+    ? Do you wish to set up SSL? Yes
+    ? Enter your email (For SSL Certificate) ENTER YOUR EMAIL ADDRESS
+    + sudo mkdir -p /etc/letsencrypt
+    ? Sudo Password [hidden]
+    + sudo ./acme.sh --install --home /etc/letsencrypt
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    + sudo nginx -s reload
+    ? Sudo Password [hidden]
+    ✔ Setting up SSL
+    ? Do you wish to set up Systemd? Yes
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    ✔ Setting up Systemd
+    ? Sudo Password [hidden]
+    ? Do you want to start Ghost? Yes
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    ? Sudo Password [hidden]
+    ✔ Starting Ghost`
 
 Ghost was installed successfully! To complete setup of your publication, visit:
 
