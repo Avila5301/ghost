@@ -55,7 +55,7 @@ Run the following cmds in terminal:
         git clone https://github.com/Avila5301/Ghost.git
    <br>
    
-        cd Ghost
+        cd ghost
 
 4. Run `sudo chmod +x ghost_setup.sh` to set execution permissions to the file
 
